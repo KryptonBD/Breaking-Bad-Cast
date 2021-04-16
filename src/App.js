@@ -7,13 +7,15 @@ import CharacterGrid from './components/Characters/CharacterGrid';
 const App = () => {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     fetchCharacter();
-  }, [])
+    //eslint-disable-next-line
+  }, [query])
 
   const fetchCharacter = async () => {
-    const res = await fetch(`https://www.breakingbadapi.com/api/characters`)
+    const res = await fetch(`https://www.breakingbadapi.com/api/characters?name=${query}`)
     const data = await res.json();
     setCharacters(data);
     setIsLoading(false);
@@ -22,8 +24,8 @@ const App = () => {
   return (
     <div className="container">
       <Header />
-      <Search />
-      <CharacterGrid  isLoading={isLoading} characters={characters}/>
+      <Search getQuery={q => setQuery(q)} />
+      <CharacterGrid isLoading={isLoading} characters={characters} />
     </div>
   );
 }
