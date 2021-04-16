@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import Header from './components/ui/Header';
+import Search from './components/ui/Search';
+import CharacterGrid from './components/Characters/CharacterGrid';
 
-function App() {
+const App = () => {
+  const [characters, setCharacters] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    fetchCharacter();
+  }, [])
+
+  const fetchCharacter = async () => {
+    const res = await fetch(`https://www.breakingbadapi.com/api/characters`)
+    const data = await res.json();
+    setCharacters(data);
+    setIsLoading(false);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <Header />
+      <Search />
+      <CharacterGrid  isLoading={isLoading} characters={characters}/>
     </div>
   );
 }
